@@ -1,12 +1,16 @@
 # Pytestify
 
-**Pytestify** is a base Python testing framework designed to simplify the process of writing and executing tests using `pytest`. It provides a set of utility functions and a configuration setup to get started quickly with testing.
+**Pytestify** is a Python testing framework that enhances pytest by offering utility functions and streamlined configurations. It simplifies writing, executing, and managing tests, making it easier to achieve robust and reliable testing outcomes.
 
 ## Features
 
-- **Logging Utilities**: Simple logging functions for informational and error messages.
-- **URL Formatting**: Utility to format URLs by combining a base URL and an endpoint.
-- **Configuration**: Basic configuration for `pytest` to handle test execution and coverage reporting.
+- **Enhanced Logging Utilities**: Comprehensive logging functions for various levels, including info, warning, error, and critical.
+- **Flexible URL Formatting**: Utility to dynamically format URLs with parameters, combining a base URL and endpoint.
+- **Schema Validation**: Built-in support for JSON schema validation to ensure data integrity and compliance.
+- **Advanced Comparison**: Recursive JSON comparison to identify discrepancies between expected and actual data.
+- **Configuration Management**: Centralized configuration using YAML files for base URLs, endpoints, and schemas, streamlining test setups.
+- **Robust Test Utilities**: Functions for managing retries, logging response times, and handling HTTP operations (GET, POST, PUT, DELETE).
+
 
 ## Installation
 
