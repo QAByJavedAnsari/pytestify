@@ -77,8 +77,10 @@ To use `pytestify`, you need to have Python 3.12 or higher installed. You can se
 - **Create a Pull Request**:
       Open a pull request on the repository to merge your changes.
 
+
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
+
 ## Contact
-For any questions or issues, please contact qabyjavedansari@gmail.com.
+For any questions or issues, please contact qabyjavedansari@gmail.com OR connect with me over linked on www.linkedin.com/in/qaleaderjavedansari.

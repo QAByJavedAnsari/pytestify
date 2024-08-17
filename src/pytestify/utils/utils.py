@@ -121,7 +121,7 @@ def extract_values_from_json_array(data, key):
     """
     return [item.get(key) for item in data if key in item]
 
-def load_schema(file_path='path/to/schema_config.yaml'):
+def load_schema(file_path='src/pytestify/config/schema_config.yaml'):
     """Load the JSON schema from the YAML configuration file."""
     with open(file_path, 'r') as file:
         return yaml.safe_load(file)

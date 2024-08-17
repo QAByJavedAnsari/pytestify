@@ -57,7 +57,7 @@ def test_retry_request(mocker):
 
 def test_compare_json():
     # Load schema from config
-    schema_config = load_schema('path/to/schema_config.yaml')
+    schema_config = load_schema()
     expected_schema = schema_config.get('user_schema')
 
     # Example actual JSON data
