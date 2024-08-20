@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "pytestify"
 version = "0.1.0"
-description = "A base Python testing framework using pytest."
+description = "Python testing framework that enhances pytest by offering utility functions and streamlined configurations. It simplifies writing, executing, and managing tests, making it easier to achieve robust and reliable testing outcomes."
 authors = ["Javed Ansari <qabyjavedansari@gmail.com>"]
 readme = "README.md"
+license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.12"

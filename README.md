@@ -22,11 +22,41 @@ To use `pytestify`, you need to have Python 3.12 or higher installed. You can se
    cd <REPOSITORY_NAME>
 
 2. **Install Dependencies**:
+   ```
    curl -sSL https://install.python-poetry.org | python3 -
    poetry install
+   ```
 
 3. **Activate the Virtual Environment**:
+   ```
    poetry shell
+   ```
+
+## Docker Requirements
+
+Docker is required to run the tests using the provided Docker image. Make sure Docker is installed and running on your machine. If Docker is not installed, follow the installation guide for your operating system:
+
+- [Docker Installation Guide](https://docs.docker.com/get-docker/)
+
+### Starting Docker
+
+If Docker is not running, you can start it by following these steps:
+
+- **For macOS**: Open the Docker Desktop application.
+- **For Windows**: Open Docker Desktop from the Start menu.
+- **For Linux**: Run `sudo systemctl start docker` in the terminal.
+
+### Troubleshooting
+
+If you encounter errors related to Docker not running, make sure Docker is properly installed and the Docker daemon is active.
+
+## Checking Docker Status
+
+Before running Docker commands, you can check if Docker is running by executing the following Python script:
+
+```bash
+python scripts/check_docker.py
+```
 
 ## Usage
 
@@ -47,12 +77,43 @@ To use `pytestify`, you need to have Python 3.12 or higher installed. You can se
     assert "INFO: Test message" in caplog.text    
 ```
 2. **Running Tests**:
-   To run tests and generate a coverage report, use:
+- Use Poetry to run tests and generate a coverage report:
+   ```bash
+     poetry run pytest
+     ```
+   - Or, use pytest directly:
 ```BASH   
     pytest --cov=src/pytestify --cov-report=term-missing
-    pytest
 ```
-3. **Configuration**:
+## Running Tests with Docker
+
+You can run the tests in a Docker container by building and running the Docker image.
+
+### Build the Docker Image
+
+```bash
+docker build -t pytestify:latest .
+````
+### Run Tests Using Docker
+```
+docker run --rm pytestify:latest
+```
+### Running Tests Without Docker
+
+If you do not want to use Docker, you can run the tests directly using Poetry. Follow these steps:
+
+1. **Install Dependencies**
+
+    ```bash
+    poetry install
+    ```
+
+2. **Run Tests**
+
+    ```bash
+    poetry run pytest
+    ```
+## Configuration:
    The pytest.ini file is located in the root directory and is used to configure pytest options:
 ```BASH
     [pytest]
@@ -60,7 +121,8 @@ To use `pytestify`, you need to have Python 3.12 or higher installed. You can se
     testpaths =
           src/pytestify/tests
 ````
-4. **Development**:
+
+## **Contribution Guidelines**:
     To contribute to the development of pytestify, follow these steps:
    - **Create a New Branch**:
    ```BASH
@@ -69,17 +131,41 @@ To use `pytestify`, you need to have Python 3.12 or higher installed. You can se
    - **Make Your Changes**:
         Edit code and write tests as needed.
 - 
-- **Commit Your Changes**:
-    ```BASH
-    git add .
-    git commit -m "Add new feature or fix bug"
-    ```
-- **Push Your Changes**:
-    ```BASH
-    git push origin feature/my-feature
-    ```
-- **Create a Pull Request**:
-      Open a pull request on the repository to merge your changes.
+  - **Commit Your Changes**:
+      ```BASH
+      git add .
+      git commit -m "Add new feature or fix bug"
+      ```
+  - **Push Your Changes**:
+      ```BASH
+      git push origin feature/my-feature
+      ```
+  - **Create a Pull Request**:
+        Open a pull request on the repository to merge your changes.
+
+## API Documentation
+
+### APIClient Class
+- get(url, headers=None, params=None): Sends a GET request.
+  -  Parameters:
+     - url: The URL to send the request to. 
+     - headers: Optional headers to include in the request. 
+     - params: Optional parameters to include in the request. 
+  - Returns: Response object.
+- post(url, headers=None, data=None, json=None): Sends a POST request.
+  - Parameters:
+    - url: The URL to send the request to. 
+    - headers: Optional headers. 
+    - data: Optional data to send in the request body. 
+    - json: Optional JSON to send in the request body.
+  - Returns: Response object. 
+
+## Utility Functions
+- format_url(base_url, endpoint): Combines a base URL and endpoint.
+- validate_json_schema(response_json, schema): Validates JSON response against a schema.
+- compare_json(expected, actual, path=""): Compares two JSON objects recursively. 
+- load_schema(file_path='src/pytestify/config/schema_config.yaml'): Loads JSON schema from a YAML file.
+
 
 
 ## License
