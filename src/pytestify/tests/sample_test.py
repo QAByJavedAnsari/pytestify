@@ -1,5 +1,4 @@
 # src/pytestify/tests/test_sample.py
-import pytest
 from pytestify.utils.utils import log_info, format_url
 
 

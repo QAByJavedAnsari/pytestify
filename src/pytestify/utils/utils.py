@@ -4,10 +4,6 @@ import requests
 import yaml
 from jsonschema import validate, ValidationError
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
 def log_info(message):
     """Log an informational message."""
     logging.info(message)
@@ -41,23 +37,23 @@ def validate_json_schema(response_json, schema):
         log_error(f"JSON schema validation failed: {e.message}")
         return False
 
-def send_get_request(url, headers=None, params=None):
-    response = requests.get(url, headers=headers, params=params)
+def send_get_request(session, url, headers=None, params=None):
+    response = session.get(url, headers=headers, params=params)
     response.raise_for_status()
     return response
 
-def send_post_request(url, headers=None, data=None, json=None):
-    response = requests.post(url, headers=headers, data=data, json=json)
+def send_post_request(session, url, headers=None, data=None, json=None):
+    response = session.post(url, headers=headers, data=data, json=json)
     response.raise_for_status()
     return response
 
-def send_put_request(url, headers=None, data=None, json=None):
-    response = requests.put(url, headers=headers, data=data, json=json)
+def send_put_request(session, url, headers=None, data=None, json=None):
+    response = session.put(url, headers=headers, data=data, json=json)
     response.raise_for_status()
     return response
 
-def send_delete_request(url, headers=None):
-    response = requests.delete(url, headers=headers)
+def send_delete_request(session, url, headers=None):
+    response = session.delete(url, headers=headers)
     response.raise_for_status()
     return response
 
