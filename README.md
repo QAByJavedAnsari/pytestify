@@ -10,6 +10,8 @@
 - **Advanced Comparison**: Recursive JSON comparison to identify discrepancies between expected and actual data.
 - **Configuration Management**: Centralized configuration using YAML files for base URLs, endpoints, and schemas, streamlining test setups.
 - **Robust Test Utilities**: Functions for managing retries, logging response times, and handling HTTP operations (GET, POST, PUT, DELETE).
+- **Docker Integration**: Build and run tests within Docker containers.
+- **Session Management**: Check Docker status and manage Docker sessions.
 
 
 ## Installation
