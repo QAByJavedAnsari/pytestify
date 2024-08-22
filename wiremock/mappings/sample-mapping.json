@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/api/test"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "sample-response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

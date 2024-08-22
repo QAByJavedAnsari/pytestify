@@ -1,0 +1,8 @@
+{
+  "status": "FAILURE",
+  "transactionId": "1234567891",
+  "amount": "100.00",
+  "currency": "INR",
+  "message": "Payment failed",
+  "errorCode": "INSUFFICIENT_FUNDS"
+}

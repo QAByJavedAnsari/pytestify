@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/upi/payment/status",
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": "$[?(@.transactionId == '1234567891')]"
+      }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "upi-failure-response.json",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": "SUCCESS",
+  "transactionId": "1234567890",
+  "amount": "100.00",
+  "currency": "INR",
+  "message": "Payment successful",
+  "upiId": "user@upi"
+}

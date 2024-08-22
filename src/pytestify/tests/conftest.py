@@ -1,8 +1,37 @@
+import subprocess
+import time
+
 import pytest
 import logging
 import os
 from pytestify.client.api_client import APIClient
 from pytestify.utils.check_docker import check_docker
+
+
+@pytest.fixture(scope="session", autouse=True)
+def start_wiremock():
+    """Start and stop WireMock server using Docker for tests."""
+    # Start WireMock using Docker
+    try:
+        subprocess.run(["docker-compose", "up", "-d"], cwd="./", check=True)
+        print("WireMock server started.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to start WireMock server: {e}")
+        pytest.fail("Failed to start WireMock server")
+
+    # Wait for WireMock to be fully started
+    time.sleep(10)  # Adjust the sleep time if necessary
+
+    yield
+
+    # Stop WireMock after tests
+    try:
+        subprocess.run(["docker-compose", "down"], cwd="./", check=True)
+        print("WireMock server stopped.")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to stop WireMock server: {e}")
+        pytest.fail("Failed to stop WireMock server")
+
 
 @pytest.fixture(scope='session', autouse=True)
 def docker_check():

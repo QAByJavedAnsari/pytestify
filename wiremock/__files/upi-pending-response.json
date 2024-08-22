@@ -1,0 +1,8 @@
+{
+  "status": "PENDING",
+  "transactionId": "1234567892",
+  "amount": "100.00",
+  "currency": "INR",
+  "message": "Payment is pending",
+  "upiId": "user@upi"
+}

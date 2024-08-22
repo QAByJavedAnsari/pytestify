@@ -127,9 +127,9 @@ If you do not want to use Docker, you can run the tests directly using Poetry. F
 ## **Contribution Guidelines**:
     To contribute to the development of pytestify, follow these steps:
    - **Create a New Branch**:
-   ```BASH
-     git checkout -b feature/my-feature
-    ```
+       ```BASH
+         git checkout -b feature/my-feature
+       ```
    - **Make Your Changes**:
         Edit code and write tests as needed.
 - 
@@ -144,6 +144,44 @@ If you do not want to use Docker, you can run the tests directly using Poetry. F
       ```
   - **Create a Pull Request**:
         Open a pull request on the repository to merge your changes.
+
+## WireMock Integration
+
+### Setting Up WireMock
+
+To test your APIs using WireMock:
+
+1. **Directory Structure**:
+   - Place your WireMock mappings in the `wiremock/mappings` directory.
+   - Place your response files in the `wiremock/__files` directory.
+
+2. **Running WireMock**:
+   - WireMock can be started and stopped automatically using `pytest` fixtures. See [conftest.py](./src/pytestify/tests/conftest.py) for details.
+
+3. **Writing Tests**:
+   - Use `requests` to interact with the mock server. Ensure that your tests handle different scenarios such as varying responses and status codes.
+
+### Example Test
+
+```python
+import requests
+
+def test_sample_response():
+    response = requests.get("http://localhost:8080/api/test")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Sample response from WireMock"}
+```
+
+### Summary
+
+- **Automate Setup**: Use `pytest` fixtures to manage WireMock lifecycle.
+- **Enhance Coverage**: Add more tests and mappings.
+- **CI/CD Integration**: Configure your CI/CD pipeline to handle WireMock.
+- **Update Documentation**: Provide clear instructions on using WireMock.
+
+If you need help with any of these steps or have additional questions, let me know!
+
+
 
 ## API Documentation
 
