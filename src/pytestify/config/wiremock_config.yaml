@@ -1,0 +1,25 @@
+mappings:
+  upi_payment_success:
+    method: "POST"
+    url: "/upi/payment/status"
+    response:
+      status: 200
+      bodyFileName: "upi_payment_success.json"
+      headers:
+        Content-Type: "application/json"
+  upi_payment_failure:
+    method: "POST"
+    url: "/upi/payment/status"
+    response:
+      status: 200
+      bodyFileName: "upi_payment_failure.json"
+      headers:
+        Content-Type: "application/json"
+  upi_payment_pending:
+    method: "POST"
+    url: "/upi/payment/status"
+    response:
+      status: 200
+      bodyFileName: "upi_payment_pending.json"
+      headers:
+        Content-Type: "application/json"

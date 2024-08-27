@@ -1,12 +1,33 @@
 import subprocess
 import time
-
+import yaml
 import pytest
 import logging
 import os
 from pytestify.client.api_client import APIClient
+from pytestify.managers.priority_manager import SimplePriorityManager
+from pytestify.reporters.difference_reporter import SimpleDifferenceReporter
 from pytestify.utils.check_docker import check_docker
 
+@pytest.fixture
+def priority_manager():
+    return SimplePriorityManager(priority_map_file='src/pytestify/config/priority_map.yaml')
+
+@pytest.fixture
+def reporter():
+    return SimpleDifferenceReporter()
+
+@pytest.fixture(scope="session")
+def config():
+    with open('src/pytestify/config/config.yaml') as f:
+        config_data = yaml.safe_load(f)
+    return config_data
+
+@pytest.fixture(scope="session")
+def schema_config():
+    with open('src/pytestify/config/schema_config.yaml') as f:
+        schema_data = yaml.safe_load(f)
+    return schema_data
 
 @pytest.fixture(scope="session", autouse=True)
 def start_wiremock():
@@ -56,14 +77,40 @@ def docker_setup():
     yield
     # Teardown code for Docker environment
 
-@pytest.fixture(scope='session')
-def api_client():
+
+@pytest.fixture(scope="function")
+def api_client(config, request):
+    print(f"Markers detected: {list(request.node.keywords.keys())}")
     """
-    Fixture to provide a reusable API client.
+    Fixture to provide a reusable API client with the ability to choose
+    between real and mock environments based on test markers.
     """
-    client = APIClient(config_file='src/pytestify/config/config.yaml')
+    use_mock = request.node.get_closest_marker("mock") is not None
+    use_real = request.node.get_closest_marker("real") is not None
+
+    if use_mock and use_real:
+        raise ValueError("Test cannot be marked with both 'mock' and 'real'")
+    elif use_mock:
+        base_url = config['wiremock_base_url']
+        #endpoints = {key: value for key, value in config['endpoints'].items()}
+    elif use_real:
+        base_url = config['base_url']
+        #endpoints = {key: value for key, value in config['endpoints'].items()}
+    else:
+        raise ValueError("Test must be marked with either 'mock' or 'real'")
+
+    # Save base URL to a temporary config file if needed
+    temp_config_path = 'temp_config.yaml'
+    with open(temp_config_path, 'w') as file:
+        yaml.dump({'base_url': base_url}, file)
+
+    client = APIClient(base_url=base_url)
+
     yield client
     client.close()
+
+    os.remove(temp_config_path)  # Clean up the temporary config file
+
 
 @pytest.fixture(scope='session', autouse=True)
 def configure_logging():

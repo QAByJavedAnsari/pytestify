@@ -1,3 +1,4 @@
+# src/pytestify/client/cpi_client.py
 import logging
 
 import requests
@@ -10,18 +11,33 @@ from pytestify.utils.utils import send_get_request, send_post_request, send_dele
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-class APIClient:
-    def __init__(self, config_file='src/pytestify/config/config.yaml'):
-        """
-        Initialize the APIClient with a base URL and optional headers from the config file.
 
+class APIClient:
+    def __init__(self, base_url=None, config_file='src/pytestify/config/config.yaml'):
+        """
+        Initialize the APIClient with a base URL and optional headers.
+        :param base_url: Base URL for the API client. If None, uses the config file.
         :param config_file: Path to the configuration YAML file.
+        """
+        self.headers = {}  # Initialize headers to an empty dictionary
+        if base_url:
+            self.base_url = base_url.rstrip('/')
+        else:
+            config = load_config(config_file)
+            self.base_url = config.get('base_url', '').rstrip('/')
+            self.headers = config.get('headers', {})
+        self.session = requests.Session()  # Initialize a session to manage connections
+        logger.info(f"Initialized APIClient with base URL: {self.base_url}")
+
+    def reload_config(self, config_file='src/pytestify/config/config.yaml'):
+        """
+        Reload configuration from a new config file.
+        :param config_file: Path to the new configuration YAML file.
         """
         config = load_config(config_file)
         self.base_url = config.get('base_url', '').rstrip('/')
         self.headers = config.get('headers', {})
-        self.session = requests.Session()  # Initialize a session to manage connections
-        logger.info(f"Initialized APIClient with base URL: {self.base_url}")
+        logger.info(f"Reloaded APIClient configuration with base URL: {self.base_url}")
 
     def _create_url(self, endpoint):
         """
@@ -46,10 +62,13 @@ class APIClient:
         url = self._create_url(endpoint)
         logger.info(f"Performing GET request to {url} with params: {params}")
         response = retry_request(lambda: send_get_request(self.session, url, headers=self.headers, params=params))
-        if response:
-            logger.info(f"GET request to {url} returned status code {response.status_code}")
-        return response
 
+        if response is None:
+            logger.error(f"GET request to {url} failed and returned None")
+        else:
+            logger.info(f"GET request to {url} returned status code {response.status_code}")
+
+        return response
 
     def post(self, endpoint, data=None, json=None):
         """
@@ -64,8 +83,12 @@ class APIClient:
         logger.info(f"Performing POST request to {url} with data: {data} and json: {json}")
         response = retry_request(
             lambda: send_post_request(self.session, url, headers=self.headers, data=data, json=json))
-        if response:
+
+        if response is None:
+            logger.error(f"POST request to {url} failed and returned None")
+        else:
             logger.info(f"POST request to {url} returned status code {response.status_code}")
+
         return response
 
 
@@ -82,8 +105,12 @@ class APIClient:
         logger.info(f"Performing PUT request to {url} with data: {data} and json: {json}")
         response = retry_request(
             lambda: send_put_request(self.session, url, headers=self.headers, data=data, json=json))
-        if response:
+
+        if response is None:
+            logger.error(f"PUT request to {url} failed and returned None")
+        else:
             logger.info(f"PUT request to {url} returned status code {response.status_code}")
+
         return response
 
 
@@ -97,9 +124,14 @@ class APIClient:
         url = self._create_url(endpoint)
         logger.info(f"Performing DELETE request to {url}")
         response = retry_request(lambda: send_delete_request(self.session, url, headers=self.headers))
-        if response:
+
+        if response is None:
+            logger.error(f"DELETE request to {url} failed and returned None")
+        else:
             logger.info(f"DELETE request to {url} returned status code {response.status_code}")
+
         return response
+
 
     def close(self):
         """

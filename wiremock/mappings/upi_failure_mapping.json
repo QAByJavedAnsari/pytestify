@@ -4,13 +4,13 @@
     "url": "/upi/payment/status",
     "bodyPatterns": [
       {
-        "matchesJsonPath": "$[?(@.transactionId == '1234567892')]"
+        "matchesJsonPath": "$[?(@.transactionId == '1234567891')]"
       }
     ]
   },
   "response": {
     "status": 200,
-    "bodyFileName": "upi-pending-response.json",
+    "bodyFileName": "upi_failure_response.json",
     "headers": {
       "Content-Type": "application/json"
     }

@@ -1,11 +1,13 @@
+#
 import logging
-from pytestify.data.data_loader import load_config
 
+import pytest
 
-def test_get_request(api_client):
-    config = load_config()
-    endpoint = config['endpoints']['posts']
-    user_id = config['user_id']
+@pytest.mark.temp
+@pytest.mark.real
+def test_get_request(api_client, config):
+    endpoint = config['endpoints']['get']
+    user_id = config['sample_test']['user_id']
 
     response = api_client.get(f"{endpoint}/{user_id}")
     logging.info("Response of the GET request: %s", response)
@@ -19,14 +21,15 @@ def test_get_request(api_client):
 
     assert json_data['id'] == user_id
 
+@pytest.mark.temp
+@pytest.mark.mock
+def test_post_request(api_client, config ):
+    endpoint = config['endpoints']['post']
+    payload = config['sample_test']['payload']['default_post']
 
-def test_post_request(api_client, ):
-    config = load_config()
+    response = api_client.post(endpoint, json=payload)
 
-    endpoint = config['endpoints']['posts']
-    default_post = config['default_post']
-
-    response = api_client.post(endpoint, json=default_post)
+    assert response is not None, "Received None response from the server"
     logging.info("Response of the POST request: %s", response)
     logging.info("Response code: %d", response.status_code)
 
@@ -36,5 +39,5 @@ def test_post_request(api_client, ):
     json_data = response.json()
     logging.info("Response received from the POST request is: %s", json_data)
 
-    assert json_data['title'] == default_post['title']
-    assert json_data['body'] == default_post['body']
+    assert json_data['title'] == payload['title']
+    assert json_data['body'] == payload['body']

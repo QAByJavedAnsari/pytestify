@@ -18,9 +18,9 @@ def load_schema(file_path='src/pytestify/config/schema_config.yaml'):
     return schema
 
 
-def load_data(file_path):
-    """Load test data from a file."""
-    with open(file_path, 'r') as file:
-        data = file.read()
-    return data
+# def load_data(file_path):
+#     """Load test data from a file."""
+#     with open(file_path, 'r') as file:
+#         data = file.read()
+#     return data
 

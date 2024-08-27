@@ -13,12 +13,18 @@ requests = "^2.32.3"
 pytest-mock = "^3.14.0"
 jsonschema = "^4.23.0"
 pyyaml = "^6.0.2"
+
 #jaraco.functools = "^4.0.2"  #Poetry is having issues with this hence commenting for now until finds a fix
 
 
 [tool.poetry.dev-dependencies]
 pytest-cov = "^5.0.0"
+pylint = "^3.2.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+lint = "pylint src"
+

@@ -1,9 +1,8 @@
 import pytest
 
-from pytestify.data.data_loader import load_config, load_schema
+from pytestify.data.data_loader import load_schema
 from pytestify.utils.utils import (
-    log_info, log_warning, log_error, log_critical,
-    format_url, validate_json_schema, log_response_time, retry_request, compare_json
+    format_url, validate_json_schema, log_response_time, retry_request
 )
 import requests
 from requests.exceptions import RequestException
@@ -54,18 +53,3 @@ def test_retry_request(mocker):
 
     # Assert that the response is None after retries
     assert response is None
-
-@pytest.mark.xfail
-def test_compare_json():
-    # Load schema from config
-    schema_config = load_schema()
-    expected_schema = schema_config.get('user_schema')
-
-    # Example actual JSON data
-    actual_json = {"name": "John", "age": 30}
-
-    # Compare actual JSON against the expected schema
-    differences = compare_json(expected_schema, actual_json)
-
-    # Assert that there are no differences
-    assert not differences, f"Differences found: {differences}"

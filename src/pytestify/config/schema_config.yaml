@@ -1,3 +1,4 @@
+# src/pytestify/config/schema_config.yaml
 user_schema:
   type: "object"
   properties:

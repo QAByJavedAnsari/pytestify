@@ -8,11 +8,13 @@
 - **Flexible URL Formatting**: Utility to dynamically format URLs with parameters, combining a base URL and endpoint.
 - **Schema Validation**: Built-in support for JSON schema validation to ensure data integrity and compliance.
 - **Advanced Comparison**: Recursive JSON comparison to identify discrepancies between expected and actual data.
+- **Priority Management**: Assign priorities to JSON fields or paths, with the ability to customize priorities via YAML configuration.
+- **Difference Reporting**: Enhanced reporting of differences in JSON comparisons, with prioritized messages.
 - **Configuration Management**: Centralized configuration using YAML files for base URLs, endpoints, and schemas, streamlining test setups.
 - **Robust Test Utilities**: Functions for managing retries, logging response times, and handling HTTP operations (GET, POST, PUT, DELETE).
 - **Docker Integration**: Build and run tests within Docker containers.
 - **Session Management**: Check Docker status and manage Docker sessions.
-
+- **
 
 ## Installation
 
@@ -124,6 +126,25 @@ If you do not want to use Docker, you can run the tests directly using Poetry. F
           src/pytestify/tests
 ````
 
+## Priority and Difference Management
+Pytestify now supports priority-based difference management for JSON comparisons:
+
+### Priority Manager:
+Configure priorities for different JSON paths via YAML files (e.g., src/pytestify/config/priority_map.yaml).
+
+### Difference Reporter:
+Customizable reporters that output discrepancies with assigned priorities.
+
+### Example Priority Map (YAML)
+```BASH
+upi_payment_status:
+  ".status": "P1"
+  ".transactionId": "P1"
+  ".amount": "P2"
+  ".currency": "P3"
+  ".message": "P2"
+```
+
 ## **Contribution Guidelines**:
     To contribute to the development of pytestify, follow these steps:
    - **Create a New Branch**:
@@ -156,32 +177,47 @@ To test your APIs using WireMock:
    - Place your response files in the `wiremock/__files` directory.
 
 2. **Running WireMock**:
-   - WireMock can be started and stopped automatically using `pytest` fixtures. See [conftest.py](./src/pytestify/tests/conftest.py) for details.
+   - **New Addition**: WireMock can be started and stopped automatically using `pytest` fixtures. See [conftest.py](./src/pytestify/tests/conftest.py) for details.
+   - **Multiple Markers Handling**: You can now specify markers in your tests to indicate whether to use mock endpoints or real endpoints. The conftest.py has been updated to handle these markers and set up the correct environment.
 
 3. **Writing Tests**:
-   - Use `requests` to interact with the mock server. Ensure that your tests handle different scenarios such as varying responses and status codes.
+   - **Mock Endpoint Test**: Use the @pytest.mark.mock decorator to indicate that a test should use mock endpoints. 
+   - **Real Endpoint Test**: Use the @pytest.mark.real decorator for tests that should interact with real endpoints.
 
 ### Example Test
-
+#### Mock End Point Example
 ```python
+import pytest
 import requests
 
-def test_sample_response():
+@pytest.mark.mock
+def test_sample_response_with_mock():
     response = requests.get("http://localhost:8080/api/test")
     assert response.status_code == 200
     assert response.json() == {"message": "Sample response from WireMock"}
+
+```
+#### Real End Point Example
+```python
+import pytest
+import requests
+
+@pytest.mark.real
+def test_sample_response_with_real():
+    response = requests.get("http://api.realendpoint.com/test")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Sample response from Real Endpoint"}
 ```
 
 ### Summary
 
 - **Automate Setup**: Use `pytest` fixtures to manage WireMock lifecycle.
+- **Handle Multiple Environments**: New Addition: Use pytest markers to switch between mock and real endpoints seamlessly.
 - **Enhance Coverage**: Add more tests and mappings.
 - **CI/CD Integration**: Configure your CI/CD pipeline to handle WireMock.
 - **Update Documentation**: Provide clear instructions on using WireMock.
 
 If you need help with any of these steps or have additional questions, let me know!
-
-
 
 ## API Documentation
 
@@ -205,8 +241,7 @@ If you need help with any of these steps or have additional questions, let me kn
 - validate_json_schema(response_json, schema): Validates JSON response against a schema.
 - compare_json(expected, actual, path=""): Compares two JSON objects recursively. 
 - load_schema(file_path='src/pytestify/config/schema_config.yaml'): Loads JSON schema from a YAML file.
-
-
+- assert_no_differences(differences: list[str]): Asserts that there are no differences in the JSON comparison and logs differences if found.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.

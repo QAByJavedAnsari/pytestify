@@ -23,8 +23,16 @@ COPY . .
 # Set PYTHONPATH environment variable
 ENV PYTHONPATH=/app/src
 
+# Run linting (optional: uncomment if you want linting to run during build)
+RUN poetry run pylint src/
+
 # Set environment variable to indicate running inside a Docker container
 ENV DOCKER_ENV=true
 
+
+
+# Run linting (optional)
+# RUN poetry run pylint src/
+
 # Run pytest to execute the tests
-CMD ["poetry", "run", "pytest", "-o", "log_cli=True", "-s"]
+CMD ["poetry", "run", "pytest", "--log-cli-level=INFO", "-s"]

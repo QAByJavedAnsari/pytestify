@@ -70,34 +70,12 @@ def retry_request(request_func, retries=3, *args, **kwargs):
     for attempt in range(retries):
         try:
             response = request_func(*args, **kwargs)
-            if response.ok:
+            if response and response.ok:  # Ensure response is not None and is successful
                 return response
         except requests.RequestException as e:
             log_warning(f"Request failed: {e}. Retrying... ({attempt+1}/{retries})")
     log_critical(f"Request failed after {retries} attempts.")
     return None
-
-def compare_json(expected, actual, path=""):
-    """
-    Recursively compare two JSON objects and return differences.
-    """
-    differences = []
-    if isinstance(expected, dict) and isinstance(actual, dict):
-        for key in expected:
-            if key not in actual:
-                differences.append(f"Key '{key}' is missing in actual data at '{path}'")
-            else:
-                differences.extend(compare_json(expected[key], actual[key], path + "." + key))
-    elif isinstance(expected, list) and isinstance(actual, list):
-        for index, item in enumerate(expected):
-            if index < len(actual):
-                differences.extend(compare_json(item, actual[index], path + f"[{index}]"))
-            else:
-                differences.append(f"Index {index} is missing in actual data at '{path}'")
-    else:
-        if expected != actual:
-            differences.append(f"Mismatch at '{path}': expected {expected}, got {actual}")
-    return differences
 
 def get_json_attribute(data, path):
     """
