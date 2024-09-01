@@ -1,0 +1,12 @@
+time="2024-09-01T17:24:09+05:30" level=warning msg="/Users/ja/IdeaProjects/PyTestify/docker-compose.yml: `version` is obsolete"
+ Network pytestify_default  Creating
+ Network pytestify_default  Created
+ Container pytestify-wiremock-1  Creating
+ Container pytestify-wiremock-1  Created
+ Container pytestify-pytestify-1  Creating
+ Container pytestify-pytestify-1  Created
+ Container pytestify-wiremock-1  Starting
+ Container pytestify-wiremock-1  Started
+ Container pytestify-pytestify-1  Starting
+ Container pytestify-pytestify-1  Started
+INFO:root:Formatted URL: http://example.com/api/test

@@ -1,0 +1,1 @@
+Markers detected: ['test_upi_payment_pending', 'mock', 'fintests', 'pytestmark', 'test_sample_upi_tests.py', 'tests', 'pytestify', 'src', 'PyTestify', '']

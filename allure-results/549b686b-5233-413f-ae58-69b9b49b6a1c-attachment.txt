@@ -1,0 +1,1 @@
+Markers detected: ['test_post_request', 'mock', 'temp', 'pytestmark', 'test_api_client.py', 'tests', 'pytestify', 'src', 'PyTestify', '']

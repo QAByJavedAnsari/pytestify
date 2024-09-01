@@ -14,7 +14,10 @@
 - **Robust Test Utilities**: Functions for managing retries, logging response times, and handling HTTP operations (GET, POST, PUT, DELETE).
 - **Docker Integration**: Build and run tests within Docker containers.
 - **Session Management**: Check Docker status and manage Docker sessions.
-- **
+- **Allure Reporting**: 
+  - **Feature Management**: Add and manage features, stories, descriptions, and severity levels in Allure reports.
+  - **Dynamic Reporting**: Generate and serve interactive Allure reports to visualize test results.
+  - **Attachment and Step Reporting**: Attach files and add steps to enhance report details.
 
 ## Installation
 
@@ -143,6 +146,77 @@ upi_payment_status:
   ".amount": "P2"
   ".currency": "P3"
   ".message": "P2"
+```
+
+## Allure Reporting Integration
+
+**Pytestify** supports Allure reporting to enhance the visibility and management of test results. This section provides information on how to set up and use Allure reporting within your testing framework.
+
+### Setup
+
+1. **Install Dependencies**:
+   Ensure you have the `allure-pytest` package installed. You can add it to your `pyproject.toml` file or install it directly:
+
+   ```bash
+   poetry add allure-pytest
+2. **Update conftest.py**: Add a fixture to manage Allure reporting details. This fixture allows you to set features, stories, descriptions, and severity levels for your tests:
+```python
+# src/pytestify/tests/conftest.py
+import pytest
+from pytestify.utils.allure_reporter import AllureReporter
+
+@pytest.fixture
+def test_setup():
+    def _setup(feature, story, description, severity):
+        AllureReporter.add_feature(feature)
+        AllureReporter.add_story(story)
+        AllureReporter.add_description(description)
+        AllureReporter.add_severity(severity)
+    return _setup
+
+```
+3. **Update allure_reporter.py**: Implement Allure reporting functions for features, stories, descriptions, severity, attachments, and steps:
+```python
+# src/pytestify/utils/allure_reporter.py
+import allure
+
+class AllureReporter:
+    @staticmethod
+    def add_feature(feature_name: str):
+        allure.dynamic.feature(feature_name)
+
+    @staticmethod
+    def add_story(story_name: str):
+        allure.dynamic.story(story_name)
+
+    @staticmethod
+    def add_description(description: str):
+        allure.dynamic.description(description)
+
+    @staticmethod
+    def add_severity(severity_level: str):
+        allure.dynamic.severity(severity_level)
+
+    @staticmethod
+    def attach_file(name: str, content: bytes, attachment_type=allure.attachment_type.TEXT):
+        allure.attach(name=name, body=content, attachment_type=attachment_type)
+
+    @staticmethod
+    def add_step(step_name: str):
+        with allure.step(step_name):
+            pass
+```
+### Running Tests with Allure
+1. ***Run Tests***: Execute your tests and generate Allure results:
+
+```bash
+Copy code
+poetry run pytest --alluredir=allure-results
+````
+2. ***Generate and View Allure Report***: Use the following command to generate and serve the Allure report:
+```bash
+Copy code
+allure serve allure-results
 ```
 
 ## **Contribution Guidelines**:

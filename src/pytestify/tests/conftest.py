@@ -8,6 +8,16 @@ from pytestify.client.api_client import APIClient
 from pytestify.managers.priority_manager import SimplePriorityManager
 from pytestify.reporters.difference_reporter import SimpleDifferenceReporter
 from pytestify.utils.check_docker import check_docker
+from pytestify.utils.allure_reporter import AllureReporter
+
+@pytest.fixture
+def test_setup():
+    def _setup(feature, story, description, severity):
+        AllureReporter.add_feature(feature)
+        AllureReporter.add_story(story)
+        AllureReporter.add_description(description)
+        AllureReporter.add_severity(severity)
+    return _setup
 
 @pytest.fixture
 def priority_manager():

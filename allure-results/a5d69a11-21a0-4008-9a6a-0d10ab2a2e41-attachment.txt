@@ -1,0 +1,1 @@
+Markers detected: ['test_get_request', 'real', 'temp', 'pytestmark', 'test_api_client.py', 'tests', 'pytestify', 'src', 'PyTestify', '']

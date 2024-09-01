@@ -1,0 +1,1 @@
+[32mINFO    [0m root:utils.py:11 Formatted URL: http://example.com/api/test

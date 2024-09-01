@@ -1,0 +1,8 @@
+[32mINFO    [0m pytestify.client.api_client:api_client.py:30 Initialized APIClient with base URL: http://localhost:8080
+[35mDEBUG   [0m pytestify.client.api_client:api_client.py:50 Created URL: http://localhost:8080/upi/payment/status
+[32mINFO    [0m pytestify.client.api_client:api_client.py:83 Performing POST request to http://localhost:8080/upi/payment/status with data: None and json: {'transactionId': '1234567891'}
+[35mDEBUG   [0m urllib3.connectionpool:connectionpool.py:243 Starting new HTTP connection (1): localhost:8080
+[35mDEBUG   [0m urllib3.connectionpool:connectionpool.py:546 http://localhost:8080 "POST /upi/payment/status HTTP/11" 200 None
+[32mINFO    [0m pytestify.client.api_client:api_client.py:90 POST request to http://localhost:8080/upi/payment/status returned status code 200
+[32mINFO    [0m root:utils.py:11 Validating status code: expected 200, got 200
+[32mINFO    [0m pytestify.client.api_client:api_client.py:141 Closed APIClient session

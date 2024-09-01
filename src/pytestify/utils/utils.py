@@ -1,5 +1,7 @@
 import logging
 import time
+from urllib.parse import urlencode
+
 import requests
 import yaml
 from jsonschema import validate, ValidationError
@@ -20,22 +22,40 @@ def log_critical(message):
     """Log a critical error message."""
     logging.critical(message)
 
-def format_url(base_url, endpoint):
-    """Format URL by combining base URL and endpoint."""
+
+def format_url(base_url, endpoint, params=None):
+    """
+    Format URL by combining base URL and endpoint, and optionally appending query parameters.
+
+    Parameters:
+    - base_url (str): The base URL.
+    - endpoint (str): The API endpoint.
+    - params (dict): Query parameters to append to the URL.
+
+    Returns:
+    - str: The formatted URL.
+    """
     if base_url is None or endpoint is None:
         log_error("Base URL or endpoint is None")
         return None
-    return f"{base_url.rstrip('/')}/{endpoint.lstrip('/')}"
+
+    url = f"{base_url.rstrip('/')}/{endpoint.lstrip('/')}"
+
+    if params:
+        query_string = urlencode(params)
+        url = f"{url}?{query_string}"
+
+    return url
 
 def validate_json_schema(response_json, schema):
     """Validate a JSON response against a schema."""
     try:
         validate(instance=response_json, schema=schema)
         log_info("JSON schema validation passed.")
-        return True
+        return True, None
     except ValidationError as e:
         log_error(f"JSON schema validation failed: {e.message}")
-        return False
+        return False, e.message
 
 def send_get_request(session, url, headers=None, params=None):
     response = session.get(url, headers=headers, params=params)
@@ -65,7 +85,7 @@ def log_response_time(request_func, *args, **kwargs):
     log_info(f"Response time: {end_time - start_time:.2f} seconds")
     return response
 
-def retry_request(request_func, retries=3, *args, **kwargs):
+def retry_request(request_func, retries=3, backoff_factor=0.3, *args, **kwargs):
     """Retries an API request in case of failure."""
     for attempt in range(retries):
         try:
@@ -73,18 +93,29 @@ def retry_request(request_func, retries=3, *args, **kwargs):
             if response and response.ok:  # Ensure response is not None and is successful
                 return response
         except requests.RequestException as e:
+            sleep_time = backoff_factor * (2 ** attempt)
             log_warning(f"Request failed: {e}. Retrying... ({attempt+1}/{retries})")
     log_critical(f"Request failed after {retries} attempts.")
     return None
 
-def get_json_attribute(data, path):
+def get_json_attribute(data, path, default=None):
     """
     Fetch a specific attribute from a JSON object using a path.
-    Example path: "user.address.street"
+
+    Parameters:
+    - data (dict): The JSON object.
+    - path (str): The dot-separated path to the attribute.
+    - default: The default value to return if the path is not found.
+
+    Returns:
+    - The value found at the specified path, or the default value.
     """
     keys = path.split('.')
     for key in keys:
-        data = data.get(key, {})
+        if not isinstance(data, dict) or key not in data:
+            log_warning(f"Key '{key}' not found in path '{path}'. Returning default value.")
+            return default
+        data = data[key]
     return data
 
 
@@ -96,6 +127,25 @@ def extract_values_from_json_array(data, key):
     return [item.get(key) for item in data if key in item]
 
 def load_schema(file_path='src/pytestify/config/schema_config.yaml'):
-    """Load the JSON schema from the YAML configuration file."""
-    with open(file_path, 'r') as file:
-        return yaml.safe_load(file)
+    """
+    Load the JSON schema from the YAML configuration file and validate it.
+
+    Parameters:
+    - file_path (str): Path to the YAML file containing the schema.
+
+    Returns:
+    - dict: The loaded schema if successful.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            schema = yaml.safe_load(file)
+            if not isinstance(schema, dict):
+                log_error(f"Invalid schema format in file: {file_path}")
+                return None
+            return schema
+    except FileNotFoundError:
+        log_error(f"Schema file not found at: {file_path}")
+        return None
+    except yaml.YAMLError as e:
+        log_error(f"Error parsing YAML file at {file_path}: {e}")
+        return None

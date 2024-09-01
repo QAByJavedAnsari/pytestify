@@ -5,7 +5,9 @@ from pytestify.utils.response_validator import ResponseValidator
 
 @pytest.mark.fintests
 @pytest.mark.mock
-def test_upi_payment_success(api_client, config, priority_manager, reporter):
+def test_upi_payment_success(api_client, config, priority_manager, reporter, test_setup):
+    test_setup("UPI Payment", "UPI Payment Success Scenario", "Verifies successful UPI payment", "critical")
+
     endpoint = config['endpoints']['upi_payment_status']
     payload = config['upi_payment']['success']['payload']
     expected_response = config['upi_payment']['success']['response']
@@ -27,7 +29,8 @@ def test_upi_payment_success(api_client, config, priority_manager, reporter):
 
 @pytest.mark.fintests
 @pytest.mark.mock
-def test_upi_payment_failure(api_client, config, priority_manager, reporter):
+def test_upi_payment_failure(api_client, config, priority_manager, reporter, test_setup):
+    test_setup("UPI Payment", "UPI Payment Failure Scenario", "Verifies failed UPI payment", "critical")
     endpoint = config['endpoints']['upi_payment_status']
     payload = config['upi_payment']['failure']['payload']
     expected_response = config['upi_payment']['failure']['response']
@@ -49,7 +52,8 @@ def test_upi_payment_failure(api_client, config, priority_manager, reporter):
 
 @pytest.mark.fintests
 @pytest.mark.mock
-def test_upi_payment_pending(api_client, config, priority_manager, reporter):
+def test_upi_payment_pending(api_client, config, priority_manager, reporter, test_setup):
+    test_setup("UPI Payment", "UPI Payment Pending Scenario", "Verifies Pending UPI payment", "critical")
     endpoint = config['endpoints']['upi_payment_status']
     payload = config['upi_payment']['pending']['payload']
     expected_response = config['upi_payment']['pending']['response']

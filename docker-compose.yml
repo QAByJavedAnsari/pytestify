@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 services:
   wiremock:
     image: wiremock/wiremock
@@ -7,3 +7,15 @@ services:
     volumes:
       - ./wiremock/mappings:/home/wiremock/mappings
       - ./wiremock/__files:/home/wiremock/__files
+
+  pytestify:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    depends_on:
+      - wiremock
+    environment:
+      - DOCKER_ENV=true
+    command: [ "sh", "-c", "poetry run pytest --alluredir=allure-results --log-cli-level=INFO -s && allure serve allure-results" ]
