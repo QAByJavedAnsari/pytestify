@@ -1,2 +1,0 @@
-WireMock server started.
-Result URL is matched

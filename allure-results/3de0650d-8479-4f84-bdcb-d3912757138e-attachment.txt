@@ -1,1 +1,0 @@
-INFO:root:JSON schema validation passed.

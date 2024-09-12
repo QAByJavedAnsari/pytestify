@@ -1,21 +1,10 @@
 # src/pytestify/config/config.yaml
 base_url: "https://jsonplaceholder.typicode.com"
-#base_url: "http://localhost:8080"
 wiremock_base_url: "http://localhost:8080"
 
 endpoints:
   upi_payment_status: "/upi/payment/status"
-  get: "/posts"
-  post: "/posts"
-
-sample_test:
-  user_id: 1
-  payload:
-    default_post:
-      title: "foo"
-      body: "bar"
-  response:
-    status_code: '201'
+  sample_test: "/api/test"
 
 upi_payment:
   success:

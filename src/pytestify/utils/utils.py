@@ -57,23 +57,23 @@ def validate_json_schema(response_json, schema):
         log_error(f"JSON schema validation failed: {e.message}")
         return False, e.message
 
-def send_get_request(session, url, headers=None, params=None):
-    response = session.get(url, headers=headers, params=params)
+def send_get_request(session, url, headers=None, params=None, timeout=None):
+    response = session.get(url, headers=headers, params=params, timeout=timeout)
     response.raise_for_status()
     return response
 
-def send_post_request(session, url, headers=None, data=None, json=None):
-    response = session.post(url, headers=headers, data=data, json=json)
+def send_post_request(session, url, headers=None, data=None, json=None, timeout=None):
+    response = session.post(url, headers=headers, data=data, json=json, timeout=timeout)
     response.raise_for_status()
     return response
 
-def send_put_request(session, url, headers=None, data=None, json=None):
-    response = session.put(url, headers=headers, data=data, json=json)
+def send_put_request(session, url, headers=None, data=None, json=None, timeout=None):
+    response = session.put(url, headers=headers, data=data, json=json, timeout=timeout)
     response.raise_for_status()
     return response
 
-def send_delete_request(session, url, headers=None):
-    response = session.delete(url, headers=headers)
+def send_delete_request(session, url, headers=None, timeout=None):
+    response = session.delete(url, headers=headers, timeout=timeout)
     response.raise_for_status()
     return response
 

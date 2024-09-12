@@ -1,2 +1,0 @@
-DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8080
-DEBUG:urllib3.connectionpool:http://localhost:8080 "GET /api/unknown HTTP/11" 404 None

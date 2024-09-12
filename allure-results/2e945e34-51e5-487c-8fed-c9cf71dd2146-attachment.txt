@@ -1,1 +1,0 @@
-ERROR:root:Base URL or endpoint is None

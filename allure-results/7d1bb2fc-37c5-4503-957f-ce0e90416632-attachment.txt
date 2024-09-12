@@ -1,1 +1,0 @@
-[1m[31mERROR   [0m root:utils.py:19 Base URL or endpoint is None

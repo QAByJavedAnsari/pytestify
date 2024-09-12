@@ -1,1 +1,0 @@
-Markers detected: ['test_upi_payment_success', 'mock', 'fintests', 'pytestmark', 'test_sample_upi_tests.py', 'tests', 'pytestify', 'src', 'PyTestify', '']

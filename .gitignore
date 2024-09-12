@@ -1,6 +1,8 @@
 # Ignore Python bytecode files
 *.pyc
 __pycache__/
+allure-results/
+
 
 # Ignore other files and directories
 # Add any other patterns here as needed

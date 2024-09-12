@@ -1,8 +1,0 @@
-INFO:pytestify.client.api_client:Initialized APIClient with base URL: http://localhost:8080
-DEBUG:pytestify.client.api_client:Created URL: http://localhost:8080/upi/payment/status
-INFO:pytestify.client.api_client:Performing POST request to http://localhost:8080/upi/payment/status with data: None and json: {'transactionId': '1234567892'}
-DEBUG:urllib3.connectionpool:Starting new HTTP connection (1): localhost:8080
-DEBUG:urllib3.connectionpool:http://localhost:8080 "POST /upi/payment/status HTTP/11" 200 None
-INFO:pytestify.client.api_client:POST request to http://localhost:8080/upi/payment/status returned status code 200
-INFO:root:Validating status code: expected 200, got 200
-INFO:pytestify.client.api_client:Closed APIClient session

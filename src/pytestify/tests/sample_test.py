@@ -1,6 +1,7 @@
 # src/pytestify/tests/test_sample.py
 import pytest
 import requests
+import logging
 
 from pytestify.utils.utils import log_info, format_url
 
@@ -22,9 +23,12 @@ def test_format_url():
     if result_url == expected_url:
         print("Result URL is matched")
 
+@pytest.mark.test
 def test_sample_response():
     url = "http://localhost:8080/api/test"
     response = requests.get(url)
+    logging.info(f"Response Status Code: {response.status_code}")
+    logging.info(f"Response Body: {response.text}")
     assert response.status_code == 200
     assert response.json() == {"message": "This is a sample response from wiremock"}
 
