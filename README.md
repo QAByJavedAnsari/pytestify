@@ -120,33 +120,186 @@ If you do not want to use Docker, you can run the tests directly using Poetry. F
     ```bash
     poetry run pytest
     ```
-## Configuration:
-   The pytest.ini file is located in the root directory and is used to configure pytest options:
-```BASH
-    [pytest]
-    addopts = --maxfail=5 --disable-warnings -q
-    testpaths =
-          src/pytestify/tests
-````
 
+# Configuration
+
+## pytest.ini Configuration
+
+The `pytest.ini` file is located in the root directory and is used to configure pytest options:
+
+```ini
+[pytest]
+addopts = --maxfail=5 --disable-warnings -q
+testpaths =
+    src/pytestify/tests
+```
+
+## Environment Configuration
+Pytestify supports flexible environment configurations using YAML files. This allows you to define different settings for various environments, such as development, staging, and production. Each environment can have its own base URL, WireMock URL, endpoints, and mock data.
+
+Example Configuration (src/pytestify/config/config.yaml):
+```yaml
+environments:
+  dev:
+    base_url: "https://dev.api.example.com"
+    wiremock_base_url: "http://localhost:8080"
+    endpoints:
+      upi_payment_status: "/upi/payment/status"
+    upi_payment:
+      success:
+        payload:
+          transactionId: "1234567890"
+        response:
+          status: "SUCCESS"
+          transactionId: "1234567890"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment successful"
+          upiId: "user@upi"
+      failure:
+        payload:
+          transactionId: "1234567891"
+        response:
+          status: "FAILURE"
+          transactionId: "1234567891"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment failed"
+          errorCode: "INSUFFICIENT_FUNDS"
+      pending:
+        payload:
+          transactionId: "1234567892"
+        response:
+          status: "PENDING"
+          transactionId: "1234567892"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment is pending"
+          upiId: "user@upi"
+  staging:
+    base_url: "https://staging.api.example.com"
+    wiremock_base_url: "http://localhost:8080"
+    endpoints:
+      upi_payment_status: "/upi/payment/status"
+    upi_payment:
+      success:
+        payload:
+          transactionId: "1234567890"
+        response:
+          status: "SUCCESS"
+          transactionId: "1234567890"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment successful"
+          upiId: "user@upi"
+      failure:
+        payload:
+          transactionId: "1234567891"
+        response:
+          status: "FAILURE"
+          transactionId: "1234567891"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment failed"
+          errorCode: "INSUFFICIENT_FUNDS"
+      pending:
+        payload:
+          transactionId: "1234567892"
+        response:
+          status: "PENDING"
+          transactionId: "1234567892"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment is pending"
+          upiId: "user@upi"
+  prod:
+    base_url: "https://jsonplaceholder.typicode.com"
+    wiremock_base_url: "http://localhost:8080"
+    endpoints:
+      upi_payment_status: "/upi/payment/status"
+    upi_payment:
+      success:
+        payload:
+          transactionId: "1234567890"
+        response:
+          status: "SUCCESS"
+          transactionId: "1234567890"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment successful"
+          upiId: "user@upi"
+      failure:
+        payload:
+          transactionId: "1234567891"
+        response:
+          status: "FAILURE"
+          transactionId: "1234567891"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment failed"
+          errorCode: "INSUFFICIENT_FUNDS"
+      pending:
+        payload:
+          transactionId: "1234567892"
+        response:
+          status: "PENDING"
+          transactionId: "1234567892"
+          amount: "100.00"
+          currency: "INR"
+          message: "Payment is pending"
+          upiId: "user@upi"
+```
+## Schema Configuration
+Pytestify supports JSON schema validation to ensure data integrity and compliance. You can define schemas for different API responses and validate against these schemas during tests.
+
+Example Schema Configuration (src/pytestify/config/schema_config.yaml):
+```yaml
+schemas:
+  upi_payment_response:
+    type: object
+    properties:
+      status:
+        type: string
+      transactionId:
+        type: string
+      amount:
+        type: string
+      currency:
+        type: string
+      message:
+        type: string
+      upiId:
+        type: string
+    required:
+      - status
+      - transactionId
+      - amount
+      - currency
+      - message
+```
 ## Priority and Difference Management
 Pytestify now supports priority-based difference management for JSON comparisons:
 
-### Priority Manager:
+### Priority Manager
 Configure priorities for different JSON paths via YAML files (e.g., src/pytestify/config/priority_map.yaml).
 
-### Difference Reporter:
+Example Priority Map (src/pytestify/config/priority_map.yaml):
+```yaml
+priority_map:
+  upi_payment_status:
+    ".status": "P1"
+    ".transactionId": "P1"
+    ".amount": "P2"
+    ".currency": "P3"
+    ".message": "P2"
+```
+## Difference Reporter
 Customizable reporters that output discrepancies with assigned priorities.
 
-### Example Priority Map (YAML)
-```BASH
-upi_payment_status:
-  ".status": "P1"
-  ".transactionId": "P1"
-  ".amount": "P2"
-  ".currency": "P3"
-  ".message": "P2"
-```
+## How to Use Configuration Files
+- Define Your Configuration: Place your YAML configuration files in the src/pytestify/config/ directory.
+- Load Configurations: Pytestify automatically loads and applies the configurations during test execution based on the environment specified.
+
 
 ## Allure Reporting Integration
 
