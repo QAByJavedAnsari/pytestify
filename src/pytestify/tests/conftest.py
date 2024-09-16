@@ -31,7 +31,20 @@ def reporter():
 def config():
     with open('src/pytestify/config/config.yaml') as f:
         config_data = yaml.safe_load(f)
-    return config_data
+
+    # Select environment based on an environment variable or default to 'dev'
+    selected_env = os.getenv('TEST_ENV', 'dev')
+
+    # Ensure selected environment exists in the config
+    if selected_env not in config_data['environments']:
+        raise ValueError(f"Environment '{selected_env}' not found in config.")
+
+    # Return the config for the selected environment
+    return config_data['environments'][selected_env]
+# def config():
+#     with open('src/pytestify/config/config.yaml') as f:
+#         config_data = yaml.safe_load(f)
+#     return config_data
 
 @pytest.fixture(scope="session")
 def schema_config():

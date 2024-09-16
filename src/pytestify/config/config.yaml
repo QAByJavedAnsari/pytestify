@@ -1,12 +1,6 @@
 # src/pytestify/config/config.yaml
-base_url: "https://jsonplaceholder.typicode.com"
-wiremock_base_url: "http://localhost:8080"
 
-endpoints:
-  upi_payment_status: "/upi/payment/status"
-  sample_test: "/api/test"
-
-upi_payment:
+common_upi_payment: &common_upi_payment
   success:
     payload:
       transactionId: "1234567890"
@@ -27,7 +21,6 @@ upi_payment:
       currency: "INR"
       message: "Payment failed"
       errorCode: "INSUFFICIENT_FUNDS"
-
   pending:
     payload:
       transactionId: "1234567892"
@@ -38,3 +31,25 @@ upi_payment:
       currency: "INR"
       message: "Payment is pending"
       upiId: "user@upi"
+
+environments:
+  dev:
+    base_url: "https://dev.api.example.com"
+    wiremock_base_url: "http://localhost:8080"
+    endpoints:
+      upi_payment_status: "/upi/payment/status"
+    upi_payment: *common_upi_payment
+
+  staging:
+    base_url: "https://staging.api.example.com"
+    wiremock_base_url: "http://localhost:8080"
+    endpoints:
+      upi_payment_status: "/upi/payment/status"
+    upi_payment: *common_upi_payment
+
+  prod:
+    base_url: "https://jsonplaceholder.typicode.com"
+    wiremock_base_url: "http://localhost:8080"
+    endpoints:
+      upi_payment_status: "/upi/payment/status"
+    upi_payment: *common_upi_payment
