@@ -67,7 +67,7 @@ python scripts/check_docker.py
 
 ## Usage
 
-1. **Writing Tests**:
+### 1. **Writing Tests**:
    You can create test files under the src/pytestify/tests directory. Here’s a basic example:
 ###### src/pytestify/tests/sample_test.py
 ```bash    
@@ -83,7 +83,7 @@ python scripts/check_docker.py
     log_info("Test message")
     assert "INFO: Test message" in caplog.text    
 ```
-2. **Running Tests**:
+### 2. **Running Tests**:
 - Use Poetry to run tests and generate a coverage report:
    ```bash
      poetry run pytest
@@ -120,6 +120,81 @@ If you do not want to use Docker, you can run the tests directly using Poetry. F
     ```bash
     poetry run pytest
     ```
+
+## CI/CD Pipeline Setup
+
+This project uses Jenkins for continuous integration and continuous deployment (CI/CD). The pipeline is configured to automatically build and test the code upon each push to the `main` branch.
+
+# Jenkins Implementation for Pytestify Framework
+
+## Overview
+
+This README provides an overview of the Jenkins setup for the Pytestify framework. Jenkins is configured to build Docker images, run tests, and handle the deployment pipeline efficiently.
+
+## Jenkins Setup
+
+### Prerequisites
+- Jenkins installed and running (preferably using Docker).
+- Docker installed on the Jenkins server.
+- Git repository containing the Pytestify framework.
+
+### Jenkinsfile
+
+The `Jenkinsfile` is located in the root of the repository and defines the pipeline for building, testing, and deploying the application. It includes:
+
+1. **Pipeline Definition**: Specifies stages for building Docker images, running tests, and handling post-build actions.
+2. **Build Stage**: Builds Docker images for the `pytestify` application and `WireMock` service.
+3. **Test Stage**: Executes tests inside the Docker containers and generates reports.
+4. **Post-Build Actions**: Archives test results and reports for review.
+
+### Key Stages in Jenkinsfile
+
+1. **Build Stage**
+   ```groovy
+   stage('Build') {
+       steps {
+           script {
+               docker.build('pytestify-image', '-f Dockerfile .')
+           }
+       }
+   }
+   ```
+2. **Test Stage**
+    ```groovy
+    stage('Test') {
+    steps {
+        script {
+            docker.image('pytestify-image').inside {
+                sh 'pytest --alluredir=allure-results'
+                allure([
+                    results: [[path: 'allure-results']]
+                ])
+            }
+        }
+    }
+    }
+    ```
+3. **Post-Build Actions**
+    ```groovy
+   stage('Post-Build') {
+    steps {
+        archiveArtifacts artifacts: '**/allure-results/**', allowEmptyArchive: true
+    }
+    }
+   ```
+## Docker Integration
+The docker-compose.yml file is used to define and run multi-container Docker applications. It includes:
+
+- WireMock Service: Mock server for testing APIs.
+- Pytestify Service: Main application service for running tests.
+
+## Webhooks
+   - Webhooks should be set up in your GitHub repository to trigger the Jenkins pipeline on code changes. Ensure the webhook points to the public Jenkins URL.
+
+## Troubleshooting
+- Port Conflicts: Ensure no other services are using the ports specified in docker-compose.yml.
+- Dependency Issues: Verify Dockerfile dependencies and ensure they are correctly installed.
+- Test Failures: Review test logs for detailed error messages and adjust test configurations as needed.
 
 # Configuration
 

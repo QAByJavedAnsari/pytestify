@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = ''
+        DOCKER_IMAGE = 'pytestify:latest'
         ALLURE_RESULTS = 'allure-results'
     }
 
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     // Build Docker image from the Dockerfile
-                    DOCKER_IMAGE = docker.build("pytestify:latest")
+                    DOCKER_IMAGE = docker.build(DOCKER_IMAGE)
                 }
             }
         }
@@ -27,8 +27,8 @@ pipeline {
             steps {
                 script {
                     // Run tests inside the built Docker container
-                    DOCKER_IMAGE.inside {
-                        sh 'poetry run pytest --alluredir=allure-results --log-cli-level=INFO -s'
+                    docker.image(DOCKER_IMAGE).inside {
+                        sh 'poetry run pytest -m fintests --alluredir=allure-results --log-cli-level=INFO -s'
                     }
                 }
             }

@@ -34,22 +34,22 @@ common_upi_payment: &common_upi_payment
 
 environments:
   dev:
-    base_url: "https://dev.api.example.com"
-    wiremock_base_url: "http://localhost:8080"
+    base_url: "https://jsonplaceholder.typicode.com"
+    wiremock_base_url: "http://localhost:8081"
     endpoints:
       upi_payment_status: "/upi/payment/status"
     upi_payment: *common_upi_payment
 
   staging:
     base_url: "https://staging.api.example.com"
-    wiremock_base_url: "http://localhost:8080"
+    wiremock_base_url: "http://localhost:8081"
     endpoints:
       upi_payment_status: "/upi/payment/status"
     upi_payment: *common_upi_payment
 
   prod:
     base_url: "https://jsonplaceholder.typicode.com"
-    wiremock_base_url: "http://localhost:8080"
+    wiremock_base_url: "http://localhost:8081"
     endpoints:
       upi_payment_status: "/upi/payment/status"
     upi_payment: *common_upi_payment
