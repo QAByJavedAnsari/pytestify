@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'pytestify:latest'
+        DOCKER_IMAGE = 'pytestifypro:latest'
         ALLURE_RESULTS = 'allure-results'
     }
 
@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Checkout the code from your repository (e.g., GitHub)
-                git branch: 'main', url: 'https://github.com/qabyjavedansari/pytestify.git'
+                git branch: 'main', url: 'https://github.com/qabyjavedansari/pytestifypro.git'
             }
         }
 

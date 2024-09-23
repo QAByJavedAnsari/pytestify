@@ -1,6 +1,6 @@
-# Pytestify
+# pytestifypro
 
-**Pytestify** is a Python testing framework that enhances pytest by offering utility functions and streamlined configurations. It simplifies writing, executing, and managing tests, making it easier to achieve robust and reliable testing outcomes.
+**pytestifypro** is a Python testing framework that enhances pytest by offering utility functions and streamlined configurations. It simplifies writing, executing, and managing tests, making it easier to achieve robust and reliable testing outcomes.
 
 ## Features
 
@@ -21,7 +21,7 @@
 
 ## Installation
 
-To use `pytestify`, you need to have Python 3.12 or higher installed. You can set up the environment and install dependencies using `Poetry`.
+To use `pytestifypro`, you need to have Python 3.12 or higher installed. You can set up the environment and install dependencies using `Poetry`.
 
 1. **Clone the Repository**:
    ```bash
@@ -68,10 +68,10 @@ python scripts/check_docker.py
 ## Usage
 
 ### 1. **Writing Tests**:
-   You can create test files under the src/pytestify/tests directory. Here’s a basic example:
-###### src/pytestify/tests/sample_test.py
+   You can create test files under the src/pytestifypro/tests directory. Here’s a basic example:
+###### src/pytestifypro/tests/sample_test.py
 ```bash    
-    from pytestify.utils.utils import log_info, format_url
+    from pytestifypro.utils.utils import log_info, format_url
         
     def test_format_url():
     base_url = "http://example.com"
@@ -90,7 +90,7 @@ python scripts/check_docker.py
      ```
    - Or, use pytest directly:
 ```BASH   
-    pytest --cov=src/pytestify --cov-report=term-missing
+    pytest --cov=src/pytestifypro --cov-report=term-missing
 ```
 ## Running Tests with Docker
 
@@ -99,11 +99,11 @@ You can run the tests in a Docker container by building and running the Docker i
 ### Build the Docker Image
 
 ```bash
-docker build -t pytestify:latest .
+docker build -t pytestifypro:latest .
 ````
 ### Run Tests Using Docker
 ```
-docker run --rm pytestify:latest
+docker run --rm pytestifypro:latest
 ```
 ### Running Tests Without Docker
 
@@ -125,25 +125,25 @@ If you do not want to use Docker, you can run the tests directly using Poetry. F
 
 This project uses Jenkins for continuous integration and continuous deployment (CI/CD). The pipeline is configured to automatically build and test the code upon each push to the `main` branch.
 
-# Jenkins Implementation for Pytestify Framework
+# Jenkins Implementation for pytestifypro Framework
 
 ## Overview
 
-This README provides an overview of the Jenkins setup for the Pytestify framework. Jenkins is configured to build Docker images, run tests, and handle the deployment pipeline efficiently.
+This README provides an overview of the Jenkins setup for the pytestifypro framework. Jenkins is configured to build Docker images, run tests, and handle the deployment pipeline efficiently.
 
 ## Jenkins Setup
 
 ### Prerequisites
 - Jenkins installed and running (preferably using Docker).
 - Docker installed on the Jenkins server.
-- Git repository containing the Pytestify framework.
+- Git repository containing the pytestifypro framework.
 
 ### Jenkinsfile
 
 The `Jenkinsfile` is located in the root of the repository and defines the pipeline for building, testing, and deploying the application. It includes:
 
 1. **Pipeline Definition**: Specifies stages for building Docker images, running tests, and handling post-build actions.
-2. **Build Stage**: Builds Docker images for the `pytestify` application and `WireMock` service.
+2. **Build Stage**: Builds Docker images for the `pytestifypro` application and `WireMock` service.
 3. **Test Stage**: Executes tests inside the Docker containers and generates reports.
 4. **Post-Build Actions**: Archives test results and reports for review.
 
@@ -154,7 +154,7 @@ The `Jenkinsfile` is located in the root of the repository and defines the pipel
    stage('Build') {
        steps {
            script {
-               docker.build('pytestify-image', '-f Dockerfile .')
+               docker.build('pytestifypro-image', '-f Dockerfile .')
            }
        }
    }
@@ -164,7 +164,7 @@ The `Jenkinsfile` is located in the root of the repository and defines the pipel
     stage('Test') {
     steps {
         script {
-            docker.image('pytestify-image').inside {
+            docker.image('pytestifypro-image').inside {
                 sh 'pytest --alluredir=allure-results'
                 allure([
                     results: [[path: 'allure-results']]
@@ -186,7 +186,7 @@ The `Jenkinsfile` is located in the root of the repository and defines the pipel
 The docker-compose.yml file is used to define and run multi-container Docker applications. It includes:
 
 - WireMock Service: Mock server for testing APIs.
-- Pytestify Service: Main application service for running tests.
+- pytestifypro Service: Main application service for running tests.
 
 ## Webhooks
    - Webhooks should be set up in your GitHub repository to trigger the Jenkins pipeline on code changes. Ensure the webhook points to the public Jenkins URL.
@@ -206,13 +206,13 @@ The `pytest.ini` file is located in the root directory and is used to configure 
 [pytest]
 addopts = --maxfail=5 --disable-warnings -q
 testpaths =
-    src/pytestify/tests
+    src/pytestifypro/tests
 ```
 
 ## Environment Configuration
-Pytestify supports flexible environment configurations using YAML files. This allows you to define different settings for various environments, such as development, staging, and production. Each environment can have its own base URL, WireMock URL, endpoints, and mock data.
+pytestifypro supports flexible environment configurations using YAML files. This allows you to define different settings for various environments, such as development, staging, and production. Each environment can have its own base URL, WireMock URL, endpoints, and mock data.
 
-Example Configuration (src/pytestify/config/config.yaml):
+Example Configuration (src/pytestifypro/config/config.yaml):
 ```yaml
 environments:
   dev:
@@ -325,9 +325,9 @@ environments:
           upiId: "user@upi"
 ```
 ## Schema Configuration
-Pytestify supports JSON schema validation to ensure data integrity and compliance. You can define schemas for different API responses and validate against these schemas during tests.
+pytestifypro supports JSON schema validation to ensure data integrity and compliance. You can define schemas for different API responses and validate against these schemas during tests.
 
-Example Schema Configuration (src/pytestify/config/schema_config.yaml):
+Example Schema Configuration (src/pytestifypro/config/schema_config.yaml):
 ```yaml
 schemas:
   upi_payment_response:
@@ -353,12 +353,12 @@ schemas:
       - message
 ```
 ## Priority and Difference Management
-Pytestify now supports priority-based difference management for JSON comparisons:
+pytestifypro now supports priority-based difference management for JSON comparisons:
 
 ### Priority Manager
-Configure priorities for different JSON paths via YAML files (e.g., src/pytestify/config/priority_map.yaml).
+Configure priorities for different JSON paths via YAML files (e.g., src/pytestifypro/config/priority_map.yaml).
 
-Example Priority Map (src/pytestify/config/priority_map.yaml):
+Example Priority Map (src/pytestifypro/config/priority_map.yaml):
 ```yaml
 priority_map:
   upi_payment_status:
@@ -372,13 +372,13 @@ priority_map:
 Customizable reporters that output discrepancies with assigned priorities.
 
 ## How to Use Configuration Files
-- Define Your Configuration: Place your YAML configuration files in the src/pytestify/config/ directory.
-- Load Configurations: Pytestify automatically loads and applies the configurations during test execution based on the environment specified.
+- Define Your Configuration: Place your YAML configuration files in the src/pytestifypro/config/ directory.
+- Load Configurations: pytestifypro automatically loads and applies the configurations during test execution based on the environment specified.
 
 
 ## Allure Reporting Integration
 
-**Pytestify** supports Allure reporting to enhance the visibility and management of test results. This section provides information on how to set up and use Allure reporting within your testing framework.
+**pytestifypro** supports Allure reporting to enhance the visibility and management of test results. This section provides information on how to set up and use Allure reporting within your testing framework.
 
 ### Setup
 
@@ -389,9 +389,9 @@ Customizable reporters that output discrepancies with assigned priorities.
    poetry add allure-pytest
 2. **Update conftest.py**: Add a fixture to manage Allure reporting details. This fixture allows you to set features, stories, descriptions, and severity levels for your tests:
 ```python
-# src/pytestify/tests/conftest.py
+# src/pytestifypro/tests/conftest.py
 import pytest
-from pytestify.utils.allure_reporter import AllureReporter
+from pytestifypro.utils.allure_reporter import AllureReporter
 
 @pytest.fixture
 def test_setup():
@@ -405,7 +405,7 @@ def test_setup():
 ```
 3. **Update allure_reporter.py**: Implement Allure reporting functions for features, stories, descriptions, severity, attachments, and steps:
 ```python
-# src/pytestify/utils/allure_reporter.py
+# src/pytestifypro/utils/allure_reporter.py
 import allure
 
 class AllureReporter:
@@ -448,7 +448,7 @@ allure serve allure-results
 ```
 
 ## **Contribution Guidelines**:
-    To contribute to the development of pytestify, follow these steps:
+    To contribute to the development of pytestifypro, follow these steps:
    - **Create a New Branch**:
        ```BASH
          git checkout -b feature/my-feature
@@ -479,7 +479,7 @@ To test your APIs using WireMock:
    - Place your response files in the `wiremock/__files` directory.
 
 2. **Running WireMock**:
-   - **New Addition**: WireMock can be started and stopped automatically using `pytest` fixtures. See [conftest.py](./src/pytestify/tests/conftest.py) for details.
+   - **New Addition**: WireMock can be started and stopped automatically using `pytest` fixtures. See [conftest.py](./src/pytestifypro/tests/conftest.py) for details.
    - **Multiple Markers Handling**: You can now specify markers in your tests to indicate whether to use mock endpoints or real endpoints. The conftest.py has been updated to handle these markers and set up the correct environment.
 
 3. **Writing Tests**:
@@ -542,7 +542,7 @@ If you need help with any of these steps or have additional questions, let me kn
 - format_url(base_url, endpoint): Combines a base URL and endpoint.
 - validate_json_schema(response_json, schema): Validates JSON response against a schema.
 - compare_json(expected, actual, path=""): Compares two JSON objects recursively. 
-- load_schema(file_path='src/pytestify/config/schema_config.yaml'): Loads JSON schema from a YAML file.
+- load_schema(file_path='src/pytestifypro/config/schema_config.yaml'): Loads JSON schema from a YAML file.
 - assert_no_differences(differences: list[str]): Asserts that there are no differences in the JSON comparison and logs differences if found.
 
 ## License
