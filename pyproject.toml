@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pytestifypro"
-version = "0.1.0"
+version = "0.1.1"
 description = "Python testing framework that enhances pytest by offering utility functions and streamlined configurations. It simplifies writing, executing, and managing tests, making it easier to achieve robust and reliable testing outcomes."
 authors = ["Javed Ansari <qabyjavedansari@gmail.com>"]
 readme = "README.md"
