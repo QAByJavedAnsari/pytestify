@@ -2,7 +2,9 @@
 *.pyc
 __pycache__/
 allure-results/
-
-
+/dist/
+/build/
+/pytestifypro.egg-info/
+*.iml
 # Ignore other files and directories
 # Add any other patterns here as needed
